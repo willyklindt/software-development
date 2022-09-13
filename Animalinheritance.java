@@ -1,12 +1,13 @@
 public class Animalinheritance {
 
     public static void main(String[] args) {
-        Animal a1, a2, a3, a4, a5;
+        Animal a1, a2, a3, a4, a5, a6;
         a1 = new Animal();
         a2 = new Dog();
         a3 = new Doggy();
         a4 = new Doggy();
         a5 = new Doggy();
+        a6 = new Doggy();
 
         a1.sound();
         a2.sound();
