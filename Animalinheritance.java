@@ -1,5 +1,5 @@
 public class Animalinheritance {
-    
+
     public static void main(String[] args) {
         Animal a1, a2, a3;
         a1 = new Animal();
@@ -12,12 +12,11 @@ public class Animalinheritance {
     }
 }
 
- class Animal {
-    void sound(){
+class Animal {
+    void sound() {
         System.out.println("Some sound");
     }
 }
-
 
 class Dog extends Animal {
     @Override
@@ -29,7 +28,6 @@ class Dog extends Animal {
 class Doggy extends Dog {
     @Override
     void sound() {
-        System.out.println("woof woof");
+        System.out.println("woof woof woof");
     }
 }
-
