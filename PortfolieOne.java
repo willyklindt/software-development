@@ -30,6 +30,7 @@ class Vessel {
 }
 
 class Container extends Vessel {
+    int conatinerAmount = 5;
 
     public Container(String flagNation, int draft, int length, int width, int cargo) {
         super(flagNation, draft, length, width, cargo);
@@ -54,8 +55,8 @@ class Tankers extends Vessel {
 }
 
 class RoRo extends Vessel {
-    int carLength = 8;
-    int truckLength = 30;
+    double carLength = 8;
+    double truckLength = 30;
 
     public RoRo(String flagNation, int draft, int length, int width, int cargo) {
         super(flagNation, draft, length, width, cargo);
@@ -65,11 +66,11 @@ class RoRo extends Vessel {
     public void loadingCargo() {
         System.out.println("RoRo cargo amount: " + cargo);
         System.out.println("Carlength on ship: " + (carLength * 3) + ". Trucklength on ship: " + truckLength * 3
-                + ". Total amout of cargo length: " + (carLength * 3 + truckLength * 3));
+                + ". Total amout of cargo length: " + (carLength * 3 + truckLength * 3 + "."));
     }
 
     public void utilitylevelofCapacity() {
         System.out.println("Total ship length: " + length + ". Fraction of cargo space left: "
-                + (carLength * 3) + (truckLength * 3) / length + "%");
+                + (carLength * 3 + truckLength * 3 / length) + "%");
     }
 }
