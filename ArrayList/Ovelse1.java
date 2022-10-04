@@ -12,7 +12,7 @@ public class Ovelse1{
         newArray.add(8, "Med");
         newArray.add(9, "Dig");
         newArray.add(10, "Nu virker det");
-        //newArray.add(10, "Her for tiden?");
+        newArray.add(11, "Her for tiden?");
 
     }
 }
@@ -30,17 +30,16 @@ class Array{
 
     public void add(int i, String v){  
         String[] tempArray = new String[20];
-        if (size > 10){
+        if (size >= 10){
           for (int index = 0; index < list.length; index++) {
-                size++;
                 tempArray[index] = list[index];
             }
             list = tempArray;
-            for (String hej : tempArray) {
+            for (String hej : list) {
                 System.out.println(hej);
             }
         }
-        list[i]=v; 
+        list[i]=v; size++;
     }
 
 
