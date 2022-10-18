@@ -18,8 +18,7 @@ public class Main {
 
         System.out.println(rational2.toDouble());
 
-        System.out.println(rational2.reduce(32 , 4));
-        System.out.println(rational);
+
 
         Rational rational3 = new Rational(7, -3);
         System.out.println(rational + "Denne bliver nu negated");
@@ -31,6 +30,9 @@ public class Main {
         Rational rationalAdd2 = new Rational(2,56);
         rationalAddedTogether = rationalAdd1.add(rationalAdd2);
         System.out.println(rationalAddedTogether);
+
+        System.out.println(rational2.reduce(32 , 4));
+        System.out.println(rational2);
     }
 }
 
