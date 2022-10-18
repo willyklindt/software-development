@@ -45,29 +45,27 @@ public class AdjGraph {
             currentv = vertices.get(i);
             System.out.println(" Antal af TEU sendt fra Vertex: " + currentv.getName());
             // kører på både edges og vertices
-               
-                System.out.println(currentv.getTEUsent());
-                System.out.println(" Antal af TEU modtaget af Vertex: " + currentv.getName());
-                System.out.println(currentv.getTEUreceived());
-            
-            System.out.println(currentv.getName() + " final == " + (-(currentv.getTEUsent() - currentv.getTEUreceived())));
+
+            System.out.println(currentv.getTEUsent());
+            System.out.println(" Antal af TEU modtaget af Vertex: " + currentv.getName());
+            System.out.println(currentv.getTEUreceived());
+
+            System.out.println(
+                    currentv.getName() + " final == " + (-(currentv.getTEUsent() - currentv.getTEUreceived())));
         }
     }
 
-    public void printSurplus() {
+    public void reversingFlowCost() {
         Vertex currentv;
+        int surplus = 0;
         for (int i = 0; i < vertices.size(); i++) {
-            int surplus = 0;
-            int recived = 0;
             currentv = vertices.get(i);
-            System.out.println("Surplus of vertex: " + currentv.getName());
             for (int j = 0; j < currentv.getOutEdges().size(); j++) {
                 Edge currente = currentv.getOutEdges().get(j);
                 surplus += currente.getWeight();
-                
             }
-            System.out.println(surplus);
         }
+        System.out.println("Reversing the flow costs: " + surplus * 100 + "$");
     }
 }
 
@@ -88,9 +86,10 @@ class Vertex implements Comparable<Vertex> { // Comparables bruges så vi kan so
     }
 
     public void setTEUsent(Integer teu) {
-        
+
         TEUsent += teu;
     }
+
     public void setTEUreceived(Integer teu) {
         TEUreceived += teu;
     }
@@ -111,13 +110,15 @@ class Vertex implements Comparable<Vertex> { // Comparables bruges så vi kan so
         this.outEdges = outEdges;
     }
 
-    /*public Integer getDistance() {
-        return distance;
-    }
-
-    public void setDistance(Integer distance) {
-        this.distance = distance;
-    }*/
+    /*
+     * public Integer getDistance() {
+     * return distance;
+     * }
+     * 
+     * public void setDistance(Integer distance) {
+     * this.distance = distance;
+     * }
+     */
 
     public Vertex(String Origin) // Constructor
     {
@@ -127,7 +128,7 @@ class Vertex implements Comparable<Vertex> { // Comparables bruges så vi kan so
 
     public void addOutEdge(Edge outEdge) {
         outEdges.add(outEdge);
-       
+
     }
 
     @Override

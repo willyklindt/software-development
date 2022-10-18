@@ -44,11 +44,9 @@ public class App {
         adjgraph.newEdge(Mom, Jeb, 500);
         adjgraph.newEdge(Mom, Sal, 2000);
 
-       // adjgraph.printGraph();
-       // adjgraph.printSurplus();
-
-        adjgraph.printTEU(); //Printer TEU
-       
+        // adjgraph.printGraph();
+        adjgraph.printTEU(); // Printer TEU
+        adjgraph.reversingFlowCost();
 
     }
 }
