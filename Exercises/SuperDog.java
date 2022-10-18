@@ -1,3 +1,4 @@
+package Exercises;
 public class SuperDog {
 
     public static void main(String[] args) {

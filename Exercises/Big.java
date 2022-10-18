@@ -1,3 +1,4 @@
+package Exercises;
 import java.math.BigInteger;
 
 //Håber det virker
