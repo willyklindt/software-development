@@ -53,15 +53,14 @@ public class AdjGraph {
         Vertex currentv;
         for (int i = 0; i < vertices.size(); i++) {
             currentv = vertices.get(i);
-            System.out.println(" Antal af TEU sendt fra Vertex: " + currentv.getName());
+            /*System.out.println(" Antal af TEU sendt fra Vertex: " + currentv.getName());
             // kører på både edges og vertices
 
             System.out.println(currentv.getTEUsent());
             System.out.println(" Antal af TEU modtaget af Vertex: " + currentv.getName());
             System.out.println(currentv.getTEUreceived());
-
-            System.out.println(
-                    currentv.getName() + " final == " + (-(currentv.getTEUsent() - currentv.getTEUreceived())));
+*/
+            System.out.println(currentv.getName() + ": Total of surplus (TEU) = " + (-(currentv.getTEUsent() - currentv.getTEUreceived())));
         }
     }
 
