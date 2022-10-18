@@ -1,77 +1,51 @@
-import java.util.ArrayList;
+
+//import java.util.ArrayList;
 import java.util.Arrays;
 
 public class App {
-    //Forelæser anbefaler at bruge AdjacencyListGraph, til at lave minimumSpanningTree, da man kan sortere Vertices på baggrund af distances, ved bruge af en queue
+    // Forelæser anbefaler at bruge AdjacencyListGraph, til at lave
+    // minimumSpanningTree, da man kan sortere Vertices på baggrund af distances,
+    // ved bruge af en queue
     public static void main(String[] args) {
-	
-        AdjGraph adjgraph = new AdjGraph(); //man behøver ikke at parse noget til denne, altså vi behøves ikke at angave hvor mange Vertixes der er her
-        Vertex A     = new Vertex("0");
-        adjgraph.addVertex(A);
 
-        Vertex B = new Vertex("1");
-        adjgraph.addVertex(B);
+        AdjGraph adjgraph = new AdjGraph(); // man behøver ikke at parse noget til denne, altså vi behøves ikke at
+                                            // angave hvor mange Vertixes der er her
+        Vertex Jaw = new Vertex("Jawaharlal Nehru");
+        adjgraph.addVertex(Jaw);
 
-        Vertex C = new Vertex("2");
-        adjgraph.addVertex(C);
+        Vertex Tan = new Vertex("Tanjung Pelepas");
+        adjgraph.addVertex(Tan);
 
-        Vertex D = new Vertex("3");
-        adjgraph.addVertex(D);
+        Vertex Dar = new Vertex("Dar Es Salaam");
+        adjgraph.addVertex(Dar);
 
-        Vertex E = new Vertex("4");
-        Vertex F = new Vertex("5");
+        Vertex Mom = new Vertex("Mombasa");
+        adjgraph.addVertex(Mom);
 
-        Vertex G = new Vertex("6");
-        adjgraph.addVertex(E);
-        adjgraph.addVertex(F);
-        adjgraph.addVertex(G);
-        adjgraph.newEdge(A, B, 1);
-        adjgraph.newEdge(A, C, 5);
-        adjgraph.newEdge(A, E, 3);
+        Vertex Zan = new Vertex("Zanzibar");
+        adjgraph.addVertex(Zan);
 
-        adjgraph.newEdge(B, E, 1);
-        adjgraph.newEdge(B, F, 7);
+        Vertex Jeb = new Vertex("Jebel Ali Dubai");
+        adjgraph.addVertex(Jeb);
 
-        adjgraph.newEdge(C, D, 1);
+        Vertex Sal = new Vertex("Salalah");
+        adjgraph.addVertex(Sal);
 
-        adjgraph.newEdge(D, E, 1);
-        adjgraph.newEdge(D, G, 1);
-
-        adjgraph.newEdge(E, C, 1);
-        adjgraph.newEdge(E, D, 3);
-        adjgraph.newEdge(E, F, 3);
-        adjgraph.newEdge(E, G, 4);
-
-        adjgraph.newEdge(F, G, 1);
+        adjgraph.newEdge(Jaw, Dar, 2000);
+        adjgraph.newEdge(Jaw, Mom, 2000);
+        adjgraph.newEdge(Tan, Dar, 3000);
+        adjgraph.newEdge(Tan, Mom, 5000);
+        adjgraph.newEdge(Tan, Zan, 2000);
+        adjgraph.newEdge(Tan, Sal, 7000);
+        adjgraph.newEdge(Tan, Jeb, 7000);
+        adjgraph.newEdge(Dar, Jeb, 2000);
+        adjgraph.newEdge(Dar, Jaw, 3000);
+        adjgraph.newEdge(Dar, Tan, 5000);
+        adjgraph.newEdge(Mom, Jeb, 500);
+        adjgraph.newEdge(Mom, Sal, 2000);
 
         adjgraph.printGraph();
-
-        // Nedenstående er Djirty shortest path, som køres på AdjancencyList
-        int n = adjgraph.vertices.size();
-        boolean[] done = new boolean[n];
-        Vertex[] prev = new Vertex[n];
-        int[] weight = new int[n];
-        Arrays.fill(weight, 1000000);
-        Arrays.fill(done, false);
-        weight[0] = 0;
-        prev[0] = adjgraph.vertices.get(0);
-
-
-        Vertex cur = null;
-        int wgt = 10000;
-        for (int i = 0; i < n; i++) {
-            if (weight[i] < wgt && !done[i])
-            {
-                cur = adjgraph.vertices.get(i);
-                wgt = weight[i];
-            }
-            System.out.println("cur " + cur);
-        }
-
-
-        for (int i = 0; i < n ; i++) {
-            System.out.println(i + " " + done[i] + " " + prev[i] + " " + weight[i]); //Mangler toString i klasse AdjancencyListGraph. Se forelæsers kode, 13-10
-        }
+        adjgraph.printSurplus();
 
     }
 }
