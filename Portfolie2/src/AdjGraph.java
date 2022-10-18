@@ -39,6 +39,21 @@ public class AdjGraph {
         }
     }
 
+    public void printTEU() {
+        Vertex currentv;
+        for (int i = 0; i < vertices.size(); i++) {
+            currentv = vertices.get(i);
+            System.out.println(" Antal af TEU sendt fra Vertex: " + currentv.getName());
+            // kører på både edges og vertices
+               
+                System.out.println(currentv.getTEUsent());
+                System.out.println(" Antal af TEU modtaget af Vertex: " + currentv.getName());
+                System.out.println(currentv.getTEUreceived());
+            
+            System.out.println(currentv.getName() + " final == " + (-(currentv.getTEUsent() - currentv.getTEUreceived())));
+        }
+    }
+
     public void printSurplus() {
         Vertex currentv;
         for (int i = 0; i < vertices.size(); i++) {
@@ -61,14 +76,23 @@ class Vertex implements Comparable<Vertex> { // Comparables bruges så vi kan so
     private String Name;
     private ArrayList<Edge> outEdges;
     private Integer distance = Integer.MAX_VALUE;
-    private Integer TEUsent;
+    private Integer TEUsent = 0;
+    private Integer TEUreceived = 0;
 
-    public void TEUsent() {
-        Vertex currentv;
+    public Integer getTEUsent() {
+        return TEUsent;
+    }
+
+    public Integer getTEUreceived() {
+        return TEUreceived;
     }
 
     public void setTEUsent(Integer teu) {
-        TEUsent = teu;
+        
+        TEUsent += teu;
+    }
+    public void setTEUreceived(Integer teu) {
+        TEUreceived += teu;
     }
 
     public String getName() {
@@ -154,7 +178,8 @@ class Edge {
         weight = cost;
         from.addOutEdge(this); // denne gør at vi i main kan oprettet Edge, uden også at skulle kalde på
         // addOutEdge
-        from.setTEUsent(this.weight);
+        fromVertex.setTEUsent(weight);
+        toVertex.setTEUreceived(weight);
     }
 
 }
