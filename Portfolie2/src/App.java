@@ -1,40 +1,77 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class App {
+    //Forelæser anbefaler at bruge AdjacencyListGraph, til at lave minimumSpanningTree, da man kan sortere Vertices på baggrund af distances, ved bruge af en queue
     public static void main(String[] args) {
-        System.out.println("Hello, World!");
-        AdjGraph adjGraph = createAdjGraph();
-    }
+	
+        AdjGraph adjgraph = new AdjGraph(); //man behøver ikke at parse noget til denne, altså vi behøves ikke at angave hvor mange Vertixes der er her
+        Vertex A     = new Vertex("0");
+        adjgraph.addVertex(A);
 
-    public static AdjGraph createAdjGraph(){
-        AdjGraph newG = new AdjGraph();
-        Vertex V0=new Vertex("0");
-        Vertex V1=new Vertex("1");
-        Vertex V2=new Vertex("2");
-        Vertex V3=new Vertex("3");
-        Vertex V4=new Vertex("4");
-        Vertex V5=new Vertex("5");
-        Vertex V6=new Vertex("6");
-        newG.addVertex(V0);
-        newG.addVertex(V1);
-        newG.addVertex(V2);
-        newG.addVertex(V3);
-        newG.addVertex(V4);
-        newG.addVertex(V5);
-        newG.addVertex(V6);
+        Vertex B = new Vertex("1");
+        adjgraph.addVertex(B);
 
-        newG.addEdge(V0,V1,1);
-        newG.addEdge(V0,V2,5);
-        newG.addEdge(V0,V4,3);
-        newG.addEdge(V1,V4,1);
-        newG.addEdge(V1,V5,7);
-        newG.addEdge(V2,V3,1);
-        newG.addEdge(V3,V4,1);
-        newG.addEdge(V3,V6,1);
-        newG.addEdge(V4,V2,1);
-        newG.addEdge(V4,V3,3);
-        newG.addEdge(V4,V5,3);
-        newG.addEdge(V4,V6,4);
-        newG.addEdge(V5,V6,1);
+        Vertex C = new Vertex("2");
+        adjgraph.addVertex(C);
 
-        return newG;
+        Vertex D = new Vertex("3");
+        adjgraph.addVertex(D);
+
+        Vertex E = new Vertex("4");
+        Vertex F = new Vertex("5");
+
+        Vertex G = new Vertex("6");
+        adjgraph.addVertex(E);
+        adjgraph.addVertex(F);
+        adjgraph.addVertex(G);
+        adjgraph.newEdge(A, B, 1);
+        adjgraph.newEdge(A, C, 5);
+        adjgraph.newEdge(A, E, 3);
+
+        adjgraph.newEdge(B, E, 1);
+        adjgraph.newEdge(B, F, 7);
+
+        adjgraph.newEdge(C, D, 1);
+
+        adjgraph.newEdge(D, E, 1);
+        adjgraph.newEdge(D, G, 1);
+
+        adjgraph.newEdge(E, C, 1);
+        adjgraph.newEdge(E, D, 3);
+        adjgraph.newEdge(E, F, 3);
+        adjgraph.newEdge(E, G, 4);
+
+        adjgraph.newEdge(F, G, 1);
+
+        adjgraph.printGraph();
+
+        // Nedenstående er Djirty shortest path, som køres på AdjancencyList
+        int n = adjgraph.vertices.size();
+        boolean[] done = new boolean[n];
+        Vertex[] prev = new Vertex[n];
+        int[] weight = new int[n];
+        Arrays.fill(weight, 1000000);
+        Arrays.fill(done, false);
+        weight[0] = 0;
+        prev[0] = adjgraph.vertices.get(0);
+
+
+        Vertex cur = null;
+        int wgt = 10000;
+        for (int i = 0; i < n; i++) {
+            if (weight[i] < wgt && !done[i])
+            {
+                cur = adjgraph.vertices.get(i);
+                wgt = weight[i];
+            }
+            System.out.println("cur " + cur);
+        }
+
+
+        for (int i = 0; i < n ; i++) {
+            System.out.println(i + " " + done[i] + " " + prev[i] + " " + weight[i]); //Mangler toString i klasse AdjancencyListGraph. Se forelæsers kode, 13-10
+        }
+
     }
 }
