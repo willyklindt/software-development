@@ -47,7 +47,7 @@ public class App {
        // adjgraph.printGraph();
        // adjgraph.printSurplus();
 
-        adjgraph.printTEU();
+        adjgraph.printTEU(); //Printer TEU
        
 
     }
