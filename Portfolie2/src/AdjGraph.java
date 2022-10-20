@@ -2,6 +2,17 @@ import java.util.ArrayList;
 
 public class AdjGraph {
     public ArrayList<Vertex> vertices;
+    ArrayList<Integer> TEUlist = new ArrayList<Integer>();
+
+    public void allTEU() {
+        Vertex currentv;
+        for (int i = 0; i < vertices.size(); i++) {
+            currentv = vertices.get(i);
+            int TEU = (currentv.getTEUsent() - currentv.getTEUreceived());
+            TEUlist.add(i, TEU);
+        }
+        System.out.println(TEUlist);
+    }
 
     // Forelæser anbefaler at bruge AdjacencyListGraph, til at lave
     // minimumSpanningTree, da man kan sortere Vertices på baggrund af distances,
@@ -13,7 +24,6 @@ public class AdjGraph {
 
     public void addVertex(Vertex v) {
         vertices.add(v);
-
     }
 
     public void newEdge(Vertex from, Vertex to, Integer TEU) {
