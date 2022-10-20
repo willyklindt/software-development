@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class AdjGraph {
+ 
     public ArrayList<Vertex> vertices;
     ArrayList<Integer> TEUlist = new ArrayList<Integer>();
 
@@ -9,9 +10,10 @@ public class AdjGraph {
         Vertex currentv;
         for (int i = 0; i < vertices.size(); i++) {
             currentv = vertices.get(i);
-            int TEU = (currentv.getTEUsent() - currentv.getTEUreceived());
+            int TEU = -(currentv.getTEUsent() - currentv.getTEUreceived()); //har tilføjet - foran ligesom i printTEU
             TEUlist.add(i, TEU);
         }
+        Collections.sort(TEUlist);
         System.out.println(TEUlist);
     }
 
@@ -64,7 +66,7 @@ public class AdjGraph {
              * System.out.println(currentv.getTEUreceived());
              */
             System.out.println(currentv.getName() + ": Total of surplus (TEU) = "
-                    + (-(currentv.getTEUsent() - currentv.getTEUreceived())));
+                    + (-(currentv.getTEUsent() - currentv.getTEUreceived()))); //Hvorfor minus foran currentv, men det ser ud til at virke???
         }
     }
 
@@ -93,26 +95,62 @@ public class AdjGraph {
         }
         Collections.sort(TEUplus);
         Collections.sort(TEUminus);
+        System.out.println("minus " + TEUminus + "plus " + TEUplus);
         int i = 0;
         int j = 0;
-        while (TEUminus.get(i) < TEUminus.size() && TEUplus.get(j) > TEUplus.size()) {
-            if (TEUminus.get(i) == 0) {
-                i++;
+        
+       // Integer desiredStock = 0;
+        
+        while (i < TEUminus.size()-1 && j < TEUplus.size()-1) { //Virkede ikke med den anden i lavede boys. Men nu er problemet, at TEUMinus listen er på 3, TEUPlus er på 4. Så den stopper før den har løbet alt igennem
+           
+           
+            if (TEUminus.get(i) == 0 ) {
+               //TEUminus.remove(i);
+               System.out.println("Tjek om TEUminis == 0 virker"); 
+               i++;
+                
+                
             }
-            if (TEUplus.get(j) == 0) {
+           if (TEUplus.get(j) == 0) {
+               // TEUplus.remove(j);
+                System.out.println("Tjek om TEUPlus == 0 virker");
                 j++;
+                
             }
             int tempM = TEUminus.get(i);
             int tempP = TEUplus.get(j);
-            // System.out.println(tempM);
-            // System.out.println(tempP);
-            int calculate = tempM + tempP;
-            TEUminus.add(i, calculate);
-            // System.out.println(calculate);
+            int min = Math.min(tempP, tempM );
+            //int calculate;
+
+            System.out.println("tempM is: " + tempM);
+             System.out.println("tempP is: " + tempP);
+
+             if (tempP > tempM*-1) // Forsøg på at tjekke om temP er større end tempM, hvis den er så skal tempP sættes til samme som tempM. Altså så man ikke putter fx. 5000 TEU i en med -2000
+             {
+                
+               tempP = tempP-tempM*-1;
+               
+                System.out.println( "Værdi af nye tempP" + tempP);
+             } 
+             
+            int calculate = tempM + tempP; // Vi mangler basically en calculate til TEUplus. Hvordan regner vi ud, hvor meget TEU der er i TEUplus, efter den har puttet TEU i TEUminus?
+            
+             
+            TEUplus.set(j,0); // virker ikke ift at opdatere TEUPlus, den bliver altid sat til 0, uanset om der var flere TEU i den
+            TEUminus.set(i, calculate);
+          
+          //  TEUplus.set(j,tempP);
+             System.out.println(calculate);
+
+           //  i++;
+          //  j++;
+
+           
+             
         }
 
-        // System.out.println(TEUplus);
-        System.out.println(TEUminus);
+         System.out.println("Listen af TEUPlus: " + TEUplus);
+       System.out.println("Listen af TEUMinu: " + TEUminus);
     }
 }
 

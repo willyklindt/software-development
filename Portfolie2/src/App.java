@@ -48,6 +48,8 @@ public class App {
         adjgraph.printTEU(); // Printer TEU
         adjgraph.reversingFlowCost();
         adjgraph.allTEU();
-        adjgraph.cheapestFlow();
+        System.out.println("-------------");
+       adjgraph.cheapestFlow();
+      
     }
 }
