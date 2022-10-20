@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class AdjGraph {
     public ArrayList<Vertex> vertices;
@@ -53,14 +54,17 @@ public class AdjGraph {
         Vertex currentv;
         for (int i = 0; i < vertices.size(); i++) {
             currentv = vertices.get(i);
-            /*System.out.println(" Antal af TEU sendt fra Vertex: " + currentv.getName());
-            // kører på både edges og vertices
-
-            System.out.println(currentv.getTEUsent());
-            System.out.println(" Antal af TEU modtaget af Vertex: " + currentv.getName());
-            System.out.println(currentv.getTEUreceived());
-*/
-            System.out.println(currentv.getName() + ": Total of surplus (TEU) = " + (-(currentv.getTEUsent() - currentv.getTEUreceived())));
+            /*
+             * System.out.println(" Antal af TEU sendt fra Vertex: " + currentv.getName());
+             * // kører på både edges og vertices
+             * 
+             * System.out.println(currentv.getTEUsent());
+             * System.out.println(" Antal af TEU modtaget af Vertex: " +
+             * currentv.getName());
+             * System.out.println(currentv.getTEUreceived());
+             */
+            System.out.println(currentv.getName() + ": Total of surplus (TEU) = "
+                    + (-(currentv.getTEUsent() - currentv.getTEUreceived())));
         }
     }
 
@@ -75,6 +79,40 @@ public class AdjGraph {
             }
         }
         System.out.println("Reversing the flow costs: " + surplus * 100 + "$");
+    }
+
+    public void cheapestFlow() {
+        ArrayList<Integer> TEUplus = new ArrayList<>();
+        ArrayList<Integer> TEUminus = new ArrayList<>();
+        for (int i = 0; i < TEUlist.size(); i++) {
+            if (TEUlist.get(i) > 0) {
+                TEUplus.add(TEUlist.get(i));
+            } else {
+                TEUminus.add(TEUlist.get(i));
+            }
+        }
+        Collections.sort(TEUplus);
+        Collections.sort(TEUminus);
+        int i = 0;
+        int j = 0;
+        while (TEUminus.get(i) < TEUminus.size() && TEUplus.get(j) > TEUplus.size()) {
+            if (TEUminus.get(i) == 0) {
+                i++;
+            }
+            if (TEUplus.get(j) == 0) {
+                j++;
+            }
+            int tempM = TEUminus.get(i);
+            int tempP = TEUplus.get(j);
+            // System.out.println(tempM);
+            // System.out.println(tempP);
+            int calculate = tempM + tempP;
+            TEUminus.add(i, calculate);
+            // System.out.println(calculate);
+        }
+
+        // System.out.println(TEUplus);
+        System.out.println(TEUminus);
     }
 }
 
