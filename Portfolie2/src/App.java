@@ -44,12 +44,11 @@ public class App {
         adjgraph.newEdge(Mom, Jeb, 500);
         adjgraph.newEdge(Mom, Sal, 2000);
 
-        // adjgraph.printGraph();
-        adjgraph.printTEU(); // Printer TEU
-        adjgraph.reversingFlowCost();
-        adjgraph.allTEU();
-        System.out.println("-------------");
-       adjgraph.cheapestFlow();
+       
+        adjgraph.calcTEUStock(); //Calculates the amount of stock for all ports
+       adjgraph.printTEU(); // Prints a list of all ports, and their initial amount of stock
+       adjgraph.reversingFlowCost(); //calculates and prints the cost of reversing the flow
+       adjgraph.cheapestFlow(); //calculates and prints the price of the flow, using the minimum cashflow approach.
       
     }
 }

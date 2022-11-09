@@ -1,209 +1,224 @@
 import java.util.ArrayList;
-import java.util.Collections;
 
-public class AdjGraph {
- 
-    public ArrayList<Vertex> vertices;
-    ArrayList<Integer> TEUlist = new ArrayList<Integer>();
+public class AdjGraph { //Defines the AdjancencyGraph class
 
-    public void allTEU() {
-        Vertex currentv;
-        for (int i = 0; i < vertices.size(); i++) {
-            currentv = vertices.get(i);
-            int TEU = -(currentv.getTEUsent() - currentv.getTEUreceived()); //har tilføjet - foran ligesom i printTEU
-            TEUlist.add(i, TEU);
-        }
-        Collections.sort(TEUlist);
-        System.out.println(TEUlist);
+    private ArrayList<Vertex> vertices; //ArrayList which containers all our vertices in our AdjencencyGraph
+    private int pricePerUnit = 100;
+
+    private int priceOfReversing; //int variable to store price of Reversing flow. 
+    private int priceOfMinimizing;
+
+    public AdjGraph() { //Class constructur
+
+        vertices = new ArrayList<Vertex>(); //Initializes a new Arraylist 
     }
 
-    // Forelæser anbefaler at bruge AdjacencyListGraph, til at lave
-    // minimumSpanningTree, da man kan sortere Vertices på baggrund af distances,
-    // ved bruge af en queue
-    public AdjGraph() {
-        vertices = new ArrayList<Vertex>();
-        // int TEUsent;
+    public void addVertex(Vertex v) { //Method that add vertices to our ArrayList, takes a Vertex as a parameter
+
+        vertices.add(v); //Adds Vertex v, to our ArrayList vertices
     }
 
-    public void addVertex(Vertex v) {
-        vertices.add(v);
-    }
+    public void newEdge(Vertex from, Vertex to, Integer TEU) { //Adds a new edge between two Vertices, and adds the weights of the note (TEU)
 
-    public void newEdge(Vertex from, Vertex to, Integer TEU) {
-        if (!(vertices.contains(from) && vertices.contains(to))) // Tjekker om vertices allerede har en from og to
+        if (!(vertices.contains(from) && vertices.contains(to))) // Checks wheither or not the two vertices exists
         {
-            System.out.println(" Vertex not found ");
+            System.out.println(" Vertex not found "); //if the two vertices doesn't exist, then return. 
             return;
         }
-        Edge newedge = new Edge(from, to, TEU);
-
+        Edge newedge = new Edge(from, to, TEU); //Otherwise create a new edge 
     }
 
-    public void printGraph() {
-        Vertex currentv;
+
+    public void calcTEUStock() { //Method that calculates the surplus/deficit of the ports
+        Vertex currentv; //Local temporary vertex
+
         for (int i = 0; i < vertices.size(); i++) {
             currentv = vertices.get(i);
-            System.out.println(" Edges from Vertex: " + currentv.getName());
-            for (int j = 0; j < currentv.getOutEdges().size(); j++) { // kører på både edges og vertices
-                Edge currente = currentv.getOutEdges().get(j);
-                System.out.println("To " + currente.getToVertex().getName() + " weight " + currente.getWeight());
-            }
-            System.out.println(" ");
+            currentv.setTEUtotal(-currentv.getTEUsent(), -currentv.getTEUreceived()); //Uses the method setTEUtotal(parses the two arguments requiered). The total TEU is set to sent-received TEU.
         }
     }
 
-    public void printTEU() {
-        Vertex currentv;
-        for (int i = 0; i < vertices.size(); i++) {
+    public void printTEU() { //Method that prints the surplus/deficit of the ports
+        
+        //Adding space, making it more readable in the console
+        System.out.println(" ");
+        System.out.println("-------------");
+        System.out.println(" ");
+
+        Vertex currentv; //Local temporary vertex
+        
+        for (int i = 0; i < vertices.size(); i++) { //For loop that iterates over list of our list of vertices, and prints the name and total TEU stock to console
             currentv = vertices.get(i);
-            /*
-             * System.out.println(" Antal af TEU sendt fra Vertex: " + currentv.getName());
-             * // kører på både edges og vertices
-             * 
-             * System.out.println(currentv.getTEUsent());
-             * System.out.println(" Antal af TEU modtaget af Vertex: " +
-             * currentv.getName());
-             * System.out.println(currentv.getTEUreceived());
-             */
-            System.out.println(currentv.getName() + ": Total of surplus (TEU) = "
-                    + (-(currentv.getTEUsent() - currentv.getTEUreceived()))); //Hvorfor minus foran currentv, men det ser ud til at virke???
+            System.out.println(currentv.getName() + ": Total of surplus/deficit (TEU) = "
+                    + (currentv.getTEUtotal())); 
         }
     }
 
-    public void reversingFlowCost() {
-        Vertex currentv;
-        int surplus = 0;
-        for (int i = 0; i < vertices.size(); i++) {
+    
+    public void reversingFlowCost() { //Method that calculates cost of reversing flow
+        Vertex currentv; //Local temporary vertex
+
+        System.out.println(" ");
+        System.out.println("-------------");
+        System.out.println(" ");
+        
+
+        for (int i = 0; i < vertices.size(); i++) { // Doublenestet for loop. 
             currentv = vertices.get(i);
             for (int j = 0; j < currentv.getOutEdges().size(); j++) {
                 Edge currente = currentv.getOutEdges().get(j);
-                surplus += currente.getWeight();
+                priceOfReversing += currente.getWeight()*pricePerUnit; //cost is updated with the values from method getWeight, which is the TEU of ports
             }
         }
-        System.out.println("Reversing the flow costs: " + surplus * 100 + "$");
+        System.out.println("Reversing the flow costs: " + priceOfReversing + "$");
     }
 
-    public void cheapestFlow() {
-        ArrayList<Integer> TEUplus = new ArrayList<>();
-        ArrayList<Integer> TEUminus = new ArrayList<>();
-        for (int i = 0; i < TEUlist.size(); i++) {
-            if (TEUlist.get(i) > 0) {
-                TEUplus.add(TEUlist.get(i));
-            } else {
-                TEUminus.add(TEUlist.get(i));
+    public void cheapestFlow() { //Method to calculate cheapest flow (solving the minimum cashflow problem)
+      
+       
+        ArrayList<Vertex> TEUplus = new ArrayList<>(); // used to store vertices with TEU surplus
+        ArrayList<Vertex> TEUminus = new ArrayList<>(); // used to store vertices with TEU deficit
+      
+       Vertex currentvertex; //Local temporary vertex
+     
+
+        //For loop that adds vertices to correct list, either surplus or deficit 
+        for (int i = 0; i < vertices.size(); i++) {
+            currentvertex = vertices.get(i);
+            if (currentvertex.getTEUtotal() > 0) {
+                TEUplus.add(currentvertex);
+            } else if (currentvertex.getTEUtotal() < 0) {
+                TEUminus.add(currentvertex);
             }
         }
-        Collections.sort(TEUplus);
-        Collections.sort(TEUminus);
-        System.out.println("minus " + TEUminus + "plus " + TEUplus);
-        int i = 0;
-        int j = 0;
-        
-       // Integer desiredStock = 0;
-        
-        while (i < TEUminus.size()-1 && j < TEUplus.size()-1) { //Virkede ikke med den anden i lavede boys. Men nu er problemet, at TEUMinus listen er på 3, TEUPlus er på 4. Så den stopper før den har løbet alt igennem
-           
-           
-            if (TEUminus.get(i) == 0 ) {
-               //TEUminus.remove(i);
-               System.out.println("Tjek om TEUminis == 0 virker"); 
-               i++;
-                
-                
-            }
-           if (TEUplus.get(j) == 0) {
-               // TEUplus.remove(j);
-                System.out.println("Tjek om TEUPlus == 0 virker");
-                j++;
-                
-            }
-            int tempM = TEUminus.get(i);
-            int tempP = TEUplus.get(j);
-            int min = Math.min(tempP, tempM );
-            //int calculate;
 
-            System.out.println("tempM is: " + tempM);
-             System.out.println("tempP is: " + tempP);
+        System.out.println("(Minus) Ports with containers to be moved: " + TEUminus);
+        System.out.println("(Plus) Ports with containers to be moved: " + TEUplus);
 
-             if (tempP > tempM*-1) // Forsøg på at tjekke om temP er større end tempM, hvis den er så skal tempP sættes til samme som tempM. Altså så man ikke putter fx. 5000 TEU i en med -2000
-             {
-                
-               tempP = tempP-tempM*-1;
-               
-                System.out.println( "Værdi af nye tempP" + tempP);
-             } 
-             
-            int calculate = tempM + tempP; // Vi mangler basically en calculate til TEUplus. Hvordan regner vi ud, hvor meget TEU der er i TEUplus, efter den har puttet TEU i TEUminus?
-            
-             
-            TEUplus.set(j,0); // virker ikke ift at opdatere TEUPlus, den bliver altid sat til 0, uanset om der var flere TEU i den
-            TEUminus.set(i, calculate);
+        while(TEUminus.size() > 0 && TEUplus.size() > 0) { //Whle TEUminus and TEUplus list is greater than 0 (meaning list is not empty)
+            //Temp strings that stores the current iteration of the TEUminus and TEUplus names, that we're comparing
+            String TEUminusTemp = TEUminus.get(TEUminus.size() -1 ).getName();
+            String TEUplusTemp = TEUplus.get(TEUplus.size() -1 ).getName();
+
+            //Temp ints that stores the current iteration of the TEUminus and TEUplus stock, that we're comparing
+            int tempM = -TEUminus.get(TEUminus.size() - 1).getTEUtotal();
+            int tempP = TEUplus.get(TEUplus.size() - 1).getTEUtotal();
           
-          //  TEUplus.set(j,tempP);
-             System.out.println(calculate);
+             //Finds the min value of the comparison of tempM and tempP.    
+            int findMinimum = Math.min(tempM, tempP);
+            
+        System.out.println(" ");
+        System.out.println("-------------");
+        
 
-           //  i++;
-          //  j++;
+            System.out.println(TEUplusTemp + " in stock: " + tempP);
+            System.out.println(TEUminusTemp + " in stock: "  + -tempM);
+            
+            System.out.println(" ");
 
-           
+            System.out.println("Transfering " + findMinimum + " TEU from: " + TEUplusTemp + " to: " + TEUminusTemp);
+            priceOfMinimizing += findMinimum*pricePerUnit; //Total cost is updated
+        
+    
+            //Updates TEU values of TEUminus and TEUplus. In other words, transfering containers between the ports
+           TEUminus.get(TEUminus.size() - 1).updateTEUtotal(TEUminus.get(TEUminus.size() - 1).getTEUtotal()+findMinimum);
+           TEUplus.get(TEUplus.size() - 1).updateTEUtotal(TEUplus.get(TEUplus.size() - 1).getTEUtotal()-findMinimum);
+
+           System.out.println(" ");
+           System.out.println(TEUplusTemp + " new stock is: " + TEUplus.get(TEUplus.size() - 1).getTEUtotal());
+           System.out.println(" ");
+           System.out.println(TEUminusTemp + " new stock is: "  + TEUminus.get(TEUminus.size() - 1).getTEUtotal());
+
+            if(TEUminus.get(TEUminus.size() -1 ).getTEUtotal() == 0) {
+                
+                System.out.println("Now removing: " + TEUminusTemp + " from list... Initial stock amount have been satisfied..");
+                TEUminus.remove(TEUminus.size() - 1);
+             //if current iteration of TEUminus TEU value == 0, then it got correct amount of stock and is removed.
+               
+            }
+            if(TEUplus.get(TEUplus.size() -1 ).getTEUtotal() == 0 && TEUplus.size() > 0 ) {
+                
+                System.out.println("Now removing: " + TEUplusTemp + " from list... Initial stock amount have been satisfied..");
+                TEUplus.remove(TEUplus.size() - 1);
+             
+               
              
         }
+        System.out.println(" ");
+        System.out.println("-------------");
+        System.out.println("Ports with minus stock: " + TEUminus);
+        System.out.println("Ports with plus stock: " + TEUplus);
+        System.out.println("The total cost of transfer was: " + priceOfMinimizing + "$");
+        System.out.println("Money saved by using minimum cashflow " + (priceOfReversing - priceOfMinimizing) + "$");
+        
 
-         System.out.println("Listen af TEUPlus: " + TEUplus);
-       System.out.println("Listen af TEUMinu: " + TEUminus);
+       
+        
     }
+
 }
 
-class Vertex implements Comparable<Vertex> { // Comparables bruges så vi kan sortere Vertex (edges), når vi skal bruge
-                                             // priority queues
-    private String Name;
-    private ArrayList<Edge> outEdges;
-    private Integer distance = Integer.MAX_VALUE;
-    private Integer TEUsent = 0;
-    private Integer TEUreceived = 0;
+}
 
-    public Integer getTEUsent() {
+class Vertex  { 
+
+    //Instance variables. Private and is set/received with get/setter methods
+    private String Name; //name of vertex
+    private ArrayList<Edge> outEdges; //ArrayList of vertices edges
+    private Integer TEUsent = 0; //Counter for amount of TEU sent
+    private Integer TEUreceived = 0; //Counter for TEU received
+    private Integer TEUtotal = 0; //counter for TEU in total (TEUsent-TEUreceived)
+
+    public Integer getTEUsent() { //Getter
         return TEUsent;
     }
 
-    public Integer getTEUreceived() {
+    public Integer getTEUreceived() { //Getter
         return TEUreceived;
     }
 
-    public void setTEUsent(Integer teu) {
+    public Integer getTEUtotal (){ //Getter
+        return TEUtotal;
+    }
+
+    public String getName() { //Getter
+        return Name;
+    }
+
+    public ArrayList<Edge> getOutEdges() { //Getter
+        return outEdges;
+    }
+
+    public void setTEUsent(Integer teu) { //Setter
 
         TEUsent += teu;
     }
 
-    public void setTEUreceived(Integer teu) {
+    public void setTEUreceived(Integer teu) { //Setter
         TEUreceived += teu;
     }
 
-    public String getName() {
-        return Name;
+   
+    public void setTEUtotal (Integer teusent, Integer teurecieved){ //Setter. Used to initially set TEUtotal
+        TEUtotal = teusent - teurecieved;
     }
 
-    public void setName(String name) {
+    public void updateTEUtotal (Integer teu){ //Setter. Used to update TEUtotal, only after it already has been initialized
+        TEUtotal = teu;
+    }
+
+    public void setName(String name) { //Setter
         Name = name;
     }
 
-    public ArrayList<Edge> getOutEdges() {
-        return outEdges;
-    }
-
-    public void setOutEdges(ArrayList<Edge> outEdges) {
+    public void setOutEdges(ArrayList<Edge> outEdges) { //Setter
         this.outEdges = outEdges;
     }
-
-    /*
-     * public Integer getDistance() {
-     * return distance;
-     * }
-     * 
-     * public void setDistance(Integer distance) {
-     * this.distance = distance;
-     * }
-     */
+    @Override
+    public String toString() { //toString methods that overrides Java's toString. Used to define how we want to print our object to the console
+        return " || " + this.Name + ", stock: " +Integer.toString(TEUtotal) + " || ";
+        
+    }
 
     public Vertex(String Origin) // Constructor
     {
@@ -216,21 +231,13 @@ class Vertex implements Comparable<Vertex> { // Comparables bruges så vi kan so
 
     }
 
-    @Override
-    public int compareTo(Vertex o) { // Bruges til sortering
-        if (this.distance < o.distance) {
-            return -1;
-        }
-        if (this.distance > o.distance) {
-            return 1;
-        }
-        return 0;
-    }
+  
 }
 
 class Edge {
     private Vertex fromVertex;
     private Vertex toVertex;
+    private Integer weight;
 
     public Vertex getFromVertex() {
         return fromVertex;
@@ -256,16 +263,15 @@ class Edge {
         this.weight = weight;
     }
 
-    private Integer weight;
-
+    
     public Edge(Vertex from, Vertex to, Integer cost) { // Constructor
         fromVertex = from;
         toVertex = to;
         weight = cost;
-        from.addOutEdge(this); // denne gør at vi i main kan oprettet Edge, uden også at skulle kalde på
-        // addOutEdge
-        fromVertex.setTEUsent(weight);
-        toVertex.setTEUreceived(weight);
+        
+        fromVertex.addOutEdge(this); // Calls the method addOutEdge with arguments (Vertex from, Vertex to, Integer cost). IE. constructs a new edge object
+        fromVertex.setTEUsent(weight); //Calls method setTEUsent, with arguments (weight). This sets the sent TEU of the edge
+        toVertex.setTEUreceived(weight); //calls the method set TEUreceived, with the argument (weight). This sets the received TEU of the edge
     }
 
 }
