@@ -33,28 +33,25 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-model.add("Hej"); //Tilføjer "hej" til listen list1, blot en test
+
         con.initArea();
-        field.setOnAction(e->con.enterText(field.getText()));
-        VBox root = new VBox(field,area);
+        //field.setOnAction(e->con.enterText(field.getText()));
 
-
-
-        field.setOnAction(e->con.enterText(field.getText()));
+        //field.setOnAction(e->con.enterText(field.getText()));
 
         ComboBox comboBoxFrom= new ComboBox(FXCollections
                 .observableArrayList(model.fromport()));
         ComboBox comboBoxTo = new ComboBox(FXCollections
                 .observableArrayList(model.toport()));
-       // setFromArray(FromArray);
-        System.out.println();
-        // Create a combo box
 
-        // Create a tile pane
+        TextArea text = new TextArea();
+        Button search = new Button("Search");
+
+        // Create horizontal view in FX
         TilePane tile_pane = new TilePane();
-        tile_pane.getChildren().addAll(comboBoxFrom, comboBoxTo);
+        tile_pane.getChildren().addAll(comboBoxFrom, comboBoxTo, text, search);
 
-        Scene scene = new Scene(tile_pane, 500, 500);
+        Scene scene = new Scene(tile_pane, 500, 700);
         stage.setTitle("JavaFX Demo");
         stage.setScene(scene);
         stage.show();

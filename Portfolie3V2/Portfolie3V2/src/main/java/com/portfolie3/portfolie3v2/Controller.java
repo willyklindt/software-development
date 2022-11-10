@@ -15,14 +15,14 @@ public class Controller {
 
     void initArea(){
         String toarea="";
-        for(String t:model.get())toarea+=t+"\n";
+        for(String t:model.fromport())toarea+=t+"\n";
         view.setArea(toarea);
     }
     void enterText(String s){
         model.add(s);
         view.clearField();
         String toarea="";
-        for(String t:model.get())toarea+=t+"\n";
+        for(String t:model.toport())toarea+=t+"\n";
         view.setArea(toarea);
     }
 
