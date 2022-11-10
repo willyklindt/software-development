@@ -34,30 +34,25 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 model.add("Hej"); //Tilføjer "hej" til listen list1, blot en test
-
+        con.initArea();
+        field.setOnAction(e->con.enterText(field.getText()));
+        VBox root = new VBox(field,area);
 
 
 
         field.setOnAction(e->con.enterText(field.getText()));
-        //VBox root = new VBox(field,area);
-        String fromPort[] =
-                { "Monday", "Tuesday", "Wednesday",
-                        "Thursday", "Friday" };
-        String to_Port[] =
-                { "Hej", "Det", "Virker",
-                        "Ikke", "ØV" };
 
-        ComboBox combo_box_from= new ComboBox(FXCollections
-                .observableArrayList(fromPort));
-        ComboBox combo_box_to = new ComboBox(FXCollections
-                .observableArrayList(to_Port));
+        ComboBox comboBoxFrom= new ComboBox(FXCollections
+                .observableArrayList(model.fromport()));
+        ComboBox comboBoxTo = new ComboBox(FXCollections
+                .observableArrayList(model.toport()));
        // setFromArray(FromArray);
         System.out.println();
         // Create a combo box
 
         // Create a tile pane
         TilePane tile_pane = new TilePane();
-        tile_pane.getChildren().addAll(combo_box_from, combo_box_to);
+        tile_pane.getChildren().addAll(comboBoxFrom, comboBoxTo);
 
         Scene scene = new Scene(tile_pane, 500, 500);
         stage.setTitle("JavaFX Demo");

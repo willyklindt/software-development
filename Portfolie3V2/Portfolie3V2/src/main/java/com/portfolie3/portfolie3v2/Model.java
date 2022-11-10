@@ -14,9 +14,12 @@ public class Model {
         db.cmd("insert into lst1 (fld2) values ('"+s+"');");
     }
 
-    public ArrayList<String> get(){
-        return db.query("SELECT name FROM habour;", "name");
+    public ArrayList<String> fromport(){
+        return db.query("SELECT fromport FROM finalResult;", "fromport");
     }
 
+    public ArrayList<String> toport(){
+        return db.query("SELECT toport FROM finalresult;", "toport");
+    }
 
 }
