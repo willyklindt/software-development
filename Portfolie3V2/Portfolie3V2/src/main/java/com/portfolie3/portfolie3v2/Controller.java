@@ -41,27 +41,35 @@ public class Controller {
     void searchVessel (String from, String to, Integer flow){ //Takes a from and to port (string) and flow (Integer)
 
         view.hideField(true);
-        //view.clearField(); //Clears textfield when searchVessel method is called.
-        ObservableList <String> result= FXCollections.observableArrayList(); //Makes an Observable List, which stores result (the vessels to be shown)
+
+        ObservableList <Integer> result= FXCollections.observableArrayList(); //Makes an Observable List, which stores result (the vessels to be shown)
 
         for (String toFind: model.availableVessels(from, to, flow)){ //Calls method avaibleVessels in Model class, for earch avaible vessel
-            result.add(toFind); //Adds string value to result list
+            result.add(Integer.valueOf(toFind)); //Adds string value to result list
         }
-        view.setListView(result); //Adds final result to listView (and avaible vessels are now shown
+        view.setFoundVessels(result); //Adds final result to listView (and avaible vessels are now shown
 
     }
 
-    void printSelected (ObservableList<String> vessel){ //Dummy method. Can be used to print names of avable vessels to console.
-        System.out.println(vessel);
+    void selectedVessel(Integer vesselID){
+        ObservableList <String> result= FXCollections.observableArrayList();
+
+        for (String findID: model.getVesselID(vesselID)){ //Calls method avaibleVessels in Model class, for earch avaible vessel
+            result.add(String.valueOf(findID)); //Adds string value to result list
+        }
+        view.showVesselName(result);
+
     }
 
-    void updateFlow (String vessel, Integer flow){ // Method to update amount of containers of a given vessel.
-        model.sendCargo("mads", flow); //Method curently doesn't work, is "hardbaged" to always update flow with 1500
+    void updateFlow (Integer vessel, Integer flow){ // Method to update amount of containers of a given vessel.
+        model.sendCargo(vessel, flow); //Method curently doesn't work, is "hardbaged" to always update flow with 1500
         //Also parameter "vessel" doesn't currently work.
         view.clearField();
         view.clearListView();
         view.hideField(false);
     }
+
+
 
 
 
