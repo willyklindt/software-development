@@ -39,6 +39,8 @@ public class Main extends Application {
     void hideField(boolean displayOption){field.setDisable(displayOption);
       }
 
+
+
       void resetSearch(){ //Method that sets comboboxes to null, textfields to null, and enables field again. Aka a "reset", so user can search again/cancel search
         comboBoxFrom.setValue(null);
         comboBoxTo.setValue(null);
@@ -65,6 +67,7 @@ public class Main extends Application {
         Label containers = new Label("Amount of containers:");
         Label vesselResult = new Label("Available vessels found:");
 
+        model.add("William");
 
 
             search.setOnAction(e-> {if (field.getText().isEmpty() != true) con.searchVessel((String) comboBoxFrom.getValue(), (String) comboBoxTo.getValue(), Integer.valueOf(field.getText()));});
@@ -85,7 +88,7 @@ public class Main extends Application {
         vBox.getChildren().addAll(fromPort,comboBoxFrom, toPort, comboBoxTo, containers, field, search, vesselResult, foundVessels, selectedVessel, showVesselID,updateFlow, cancelSearch);
 
         Scene scene = new Scene(vBox, 800, 900);
-        stage.setTitle("JavaFX Demo");
+        stage.setTitle("Not M0m0nd0");
         stage.setScene(scene);
         stage.show();
     }
