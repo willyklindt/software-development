@@ -56,6 +56,7 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
 
 
+
         Button search = new Button("Search"); //Search button
         Button updateFlow = new Button("Send containers"); //Button used for updating flow, is clicked when avaible vessel is selected
         Button selectedVessel = new Button("Select vessel");
@@ -66,8 +67,9 @@ public class Main extends Application {
         Label toPort = new Label("To Port:");
         Label containers = new Label("Amount of containers:");
         Label vesselResult = new Label("Available vessels found:");
+        //model.initDB();
 
-        model.add("William");
+        //model.add("William");
 
 
             search.setOnAction(e-> {if (field.getText().isEmpty() != true) con.searchVessel((String) comboBoxFrom.getValue(), (String) comboBoxTo.getValue(), Integer.valueOf(field.getText()));});
