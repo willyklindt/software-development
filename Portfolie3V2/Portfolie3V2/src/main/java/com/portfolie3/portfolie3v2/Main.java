@@ -89,7 +89,7 @@ public class Main extends Application {
         VBox vBox = new VBox(15);
         vBox.getChildren().addAll(fromPort,comboBoxFrom, toPort, comboBoxTo, containers, field, search, vesselResult, foundVessels, selectedVessel, showVesselID,updateFlow, cancelSearch);
 
-        Scene scene = new Scene(vBox, 800, 900);
+        Scene scene = new Scene(vBox, 400, 500);
         stage.setTitle("Not M0m0nd0");
         stage.setScene(scene);
         stage.show();
